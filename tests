@@ -795,7 +795,7 @@ Tab8:Button{
 	Name = "Teleport to safe place",
 	Description = "",
 	Callback = function() 
-		teleportTo(workspace.Terrain["Warden Shrines"].Verdant:GetChildren()[9].CFrame)
+		teleportTo(workspace.Terrain["Warden Shrines"].Verdant:GetChildren()[5].CFrame)
 	end
 }
 
