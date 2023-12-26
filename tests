@@ -10,7 +10,7 @@ getgenv().autoCompleteBakery  = false
 
 
 --UI lib
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/ui-library/main/ui%20library"))()
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/ui-library/main/ui%20library.lua"))()
 
 
 local GUI = Mercury:Create{
