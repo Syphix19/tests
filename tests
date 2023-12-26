@@ -1,4 +1,4 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/tests/main/mercury%20ui%20lib%20test%20setting"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
 
 local gui = Library:create{
     Theme = Library.Themes.Serika
@@ -9,7 +9,41 @@ local tab = gui:tab{
     Name = "Aimbot"
 }
 
-
+tab:button({
+    Name = "show prompt",
+    Callback = function()
+        tab:prompt{
+            Title = "baby",
+            Text = "shark doo doo doo doo im blank lmao",
+            Buttons = {
+                Ok = function()
+                    tab:prompt{
+                        Followup = true,
+                        Title = "really?",
+                        Text = "you sure?=",
+                        Buttons = {
+                            Yes = function()
+                                tab:prompt{
+                                    Followup = true,
+                                    Title = "xd",
+                                    Text = "sus",
+                                    Buttons = {
+                                        balls = function()
+                                            gui:set_status("github")
+                                        end,
+                                        anal = function()
+                                            gui:set_Status("money")
+                                        end
+                                    }
+                                }
+                            end,
+                        }
+                    }
+                end,
+            }
+        }
+    end,
+})
 tab:keybind({Callback = function()
     gui:prompt()
 end,})
@@ -31,7 +65,7 @@ tab:dropdown({
         {"Two", 2},
         {"Three", 3}
     },
-    Description = "amo",
+    Description = "amongu s",
     Callback = function(v)
         print(v, "clicked")
     end,
@@ -45,7 +79,7 @@ tab:textbox({Callback = function(v)
 end,})
 
 tab:color_picker({
-    Name = "your m",
+    Name = "your mom's color",
     Style = Library.ColorPickerStyles.Legacy,
     Description = "Click to adjust color...",
     Callback = function(color)
