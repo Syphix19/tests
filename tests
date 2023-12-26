@@ -784,6 +784,14 @@ Tab7:Textbox({
 }
 
 Tab8:Button{
+	Name = "Hide scents",
+	Description = "",
+	Callback = function() 
+		game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("HideScent"):FireServer()
+	end
+}
+
+Tab8:Button{
 	Name = "Teleport to safe place",
 	Description = "",
 	Callback = function() 
