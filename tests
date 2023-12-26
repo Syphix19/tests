@@ -1,88 +1,122 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
 
-local gui = Library:create{
-    Theme = Library.Themes.Serika
+
+
+local GUI = Mercury:Create{
+    Name = "Mercury",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Dark,
+    Link = "https://github.com/deeeity/mercury-lib"
 }
 
-local tab = gui:tab{
-    Icon = "rbxassetid://6034996695",
-    Name = "Aimbot"
+
+
+local Tab = GUI:Tab{
+	Name = "New Tab",
+	Icon = "rbxassetid://8569322835"
 }
 
-tab:button({
-    Name = "show prompt",
-    Callback = function()
-        tab:prompt{
-            Title = "baby",
-            Text = "shark doo doo doo doo im blank lmao",
-            Buttons = {
-                Ok = function()
-                    tab:prompt{
-                        Followup = true,
-                        Title = "really?",
-                        Text = "you sure?=",
-                        Buttons = {
-                            Yes = function()
-                                tab:prompt{
-                                    Followup = true,
-                                    Title = "xd",
-                                    Text = "sus",
-                                    Buttons = {
-                                        balls = function()
-                                            gui:set_status("github")
-                                        end,
-                                        anal = function()
-                                            gui:set_Status("money")
-                                        end
-                                    }
-                                }
-                            end,
-                        }
-                    }
-                end,
-            }
-        }
-    end,
-})
-tab:keybind({Callback = function()
-    gui:prompt()
-end,})
-tab:dropdown({
-    Name = "Dropdown",
-    Description = "yeeeeeeeeeeeeeeeeeeeboi",
-    StartingText = "Bodypart",
-    Items = {
-        "Head",
-        "Torso",
-        "Random"
-    }
-})
-tab:dropdown({
-    Name = "yes",
-    StartingText = "Number",
-    Items = {
-        {"One", 1},
-        {"Two", 2},
-        {"Three", 3}
-    },
-    Description = "amongu s",
-    Callback = function(v)
-        print(v, "clicked")
-    end,
-})
-local cum = tab:slider({Callback = function(v)
-    gui:set_status(v)
-end})
 
-tab:textbox({Callback = function(v)
-    gui:prompt{Text = v}
+
+Tab:Button{
+	Name = "Button",
+	Description = nil,
+	Callback = function() end
+}
+
+
+
+Tab:Toggle{
+	Name = "Toggle",
+	StartingState = false,
+	Description = nil,
+	Callback = function(state) end
+}
+
+
+
+Tab:Textbox{
+	Name = "Textbox",
+	Callback = function(text) end
+}
+
+
+
+local MyDropdown = Tab:Dropdown{
+	Name = "Dropdown",
+	StartingText = "Select...",
+	Description = nil,
+	Items = {
+		{"Hello", 1}, 		-- {name, value}
+		12,			-- or just value, which is also automatically taken as name
+		{"Test", "bump the thread pls"}
+	},
+	Callback = function(item) return end
+}
+
+MyDropdown:AddItems({
+	{"NewItem", 12},		-- {name, value}
+	400				-- or just value, which is also automatically taken as name
+})
+
+MyDropdown:RemoveItems({
+	"NewItem", "Hello"		-- just the names to get removed (upper/lower case ignored)
+})
+
+MyDropdown:Clear()
+
+
+
+Tab:Slider{
+	Name = "Slider",
+	Default = 50,
+	Min = 0,
+	Max = 100,
+	Callback = function() end
+}
+
+
+Tab:keybind({Callback = function()
+    print("hh")
 end,})
 
-tab:color_picker({
-    Name = "your mom's color",
-    Style = Library.ColorPickerStyles.Legacy,
-    Description = "Click to adjust color...",
-    Callback = function(color)
-        print(color)
-    end,
-})
+
+
+GUI:Prompt{
+	Followup = false,
+	Title = "Prompt",
+	Text = "Prompts are cool",
+	Buttons = {
+		ok = function()
+			return true
+		end,
+		no = function()
+			return false
+		end
+	}
+}
+
+
+
+GUI:Notification{
+	Title = "Alert",
+	Text = "You shall bump the thread on V3rmillion!",
+	Duration = 3,
+	Callback = function() end
+}
+
+
+
+Tab:ColorPicker{
+	Style = Mercury.ColorPickerStyles.Legacy,
+	Callback = function(color) end
+}
+
+
+
+GUI:Credit{
+	Name = "Creditor's name",
+	Description = "Helped with the script",
+	V3rm = "link/name",
+	Discord = "helo#1234"
+}
