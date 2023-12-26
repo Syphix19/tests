@@ -5,7 +5,7 @@ local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphi
 local GUI = Mercury:Create{
     Name = "Mercury",
     Size = UDim2.fromOffset(600, 400),
-    Theme = Mercury.Themes.Dark,
+    Theme = Mercury.Themes.Serika,
     Link = "https://github.com/Syphix19/tests/blob/main/mercury%20ui%20lib%20test%20setting"
 }
 
