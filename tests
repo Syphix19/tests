@@ -17,7 +17,7 @@ local GUI = Mercury:Create{
     Name = "Keido ui",
     Size = UDim2.fromOffset(480, 360),
     Theme = Mercury.Themes.Dark,
-    Link = "https://github.com/Syphix19/ui-library/blob/main/ui%20library.txt"
+    Link = "https://github.com/Syphix19/ui-library/blob/main/ui%20library"
 }
 
 GUI:Prompt{
