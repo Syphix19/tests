@@ -10,14 +10,14 @@ getgenv().autoCompleteBakery  = false
 
 
 --UI lib
-local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/ui-library/main/ui%20library"))()
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/ui-library/main/uiLib"))()
 
 
 local GUI = Mercury:Create{
     Name = "Keido ui",
     Size = UDim2.fromOffset(480, 360),
     Theme = Mercury.Themes.Dark,
-    Link = "https://github.com/Syphix19/ui-library/blob/main/ui%20library"
+    Link = "https://github.com/Syphix19/ui-library/blob/main/uiLib"
 }
 
 GUI:Prompt{
