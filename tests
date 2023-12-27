@@ -1140,12 +1140,3 @@ Tab8:Button{
 	end
 }
 
-Tab9:Dropdown{
-	Name = "Dropdown",
-	StartingText = "Select...",
-	Description = nil,
-	Items = {
-		{"Hello"}, 		
-	},
-	Callback = function(item) return end
-}
