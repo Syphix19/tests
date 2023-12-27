@@ -1063,14 +1063,14 @@ local valueSlot1
 		{"Slot 1", "Slot 1"},
 	},
 	Callback = function(itemTest) return end
-}
+ }
 
 Tab9:Button{
 	Name = "testt",
 	Description = "eeeeeee",
 	Callback = function() 
 		GUI:Notification{
-			Title = "Slot 1 :",
+			Title = "Slot :",
 			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.itemTest.Dino.Value,
 			Duration = 3,
 			Callback = function() end
