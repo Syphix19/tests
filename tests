@@ -1046,7 +1046,7 @@ Tab8:Button{
 	end
 }
 
-Tab8:Button{
+Tab9:Button{
 	Name = "Kill creature (korathos recommended)",
 	Description = "",
 	Callback = function() 
