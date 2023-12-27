@@ -1145,7 +1145,7 @@ Tab9:Dropdown{
 	StartingText = "Select...",
 	Description = nil,
 	Items = {
-		{"Hello"}, 
+		"Hello", 
 	},
 	Callback = function(item) return end
 }
