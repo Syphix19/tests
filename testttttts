@@ -1155,13 +1155,13 @@ Tab9:Dropdown{
 		return end
 }
 
-Tab8:Button{
+Tab9:Button{
 	Name = "tetetest",
 	Description = "",
 	Callback = function() 
 		GUI:Notification{
 			Title = "Slot :",
-			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.itemSlots.Dino,
+			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.creatureSlotKnow.Dino,
 			Duration = 3,
 			Callback = function() end
 		}
