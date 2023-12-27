@@ -1140,13 +1140,12 @@ Tab8:Button{
 	end
 }
 
-Tab9:Dropdown({
-    Name = "Dropdown",
-    Description = "yeeeeeeeeeeeeeeeeeeeboi",
-    StartingText = "Bodypart",
-    Items = {
-        "Head",
-        "Torso",
-        "Random"
-    }
-})
+Tab9:Dropdown{
+	Name = "Dropdown",
+	StartingText = "Select...",
+	Description = nil,
+	Items = {
+		{"Hello"}, 		-- {name, value}
+	},
+	Callback = function(item) return end
+}
