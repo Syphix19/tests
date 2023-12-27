@@ -1,5 +1,1 @@
-local args = {
-    [1] = Vector3.new(396.3997497558594, 239.05638122558594, 2400.779541015625)
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("MeteorSelfDamage"):FireServer(unpack(args))
+getNil("ShoomReward", "RemoteEvent"):FireServer()
