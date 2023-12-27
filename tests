@@ -1140,13 +1140,17 @@ Tab8:Button{
 	end
 }
 
+local creatureSlotKnow
+
 Tab9:Dropdown{
-	Name = "Dropdown",
+	Name = "Know creature's slot",
 	StartingText = "Select...",
 	Description = nil,
 	Items = {
-		{"Hello"}, 	
+		{"Slot"}, 	
 		{"Hi"}	
 	},
-	Callback = function(item) return end
+	Callback = function(itemSlots) 
+		creatureSlotKnow = itemSlots
+		return end
 }
