@@ -1054,15 +1054,18 @@ Tab9:Button{
 	end
 }
 
-
-Tab9:Dropdown{
+local valueSlot1
+ Tab9:Dropdown{
 	Name = "Dropdown",
 	StartingText = "Select...",
 	Description = nil,
 	Items = {
-		{"Slot 1", "Slot 1"}
+		{"Slot 1", "Slot 1"},
+		{"Slot 2", "Slot 2"}
 	},
-	Callback = function(itemTest) return end
+	Callback = function(itemTest)
+		valueSlot1 = itemTest
+		 return end
 }
 
 Tab9:Button{
