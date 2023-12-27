@@ -103,6 +103,11 @@ local Tab8 = GUI:Tab{
 	Name = "Artifacts beta (wip)",				     
 	Icon = "rbxassetid://15755618125"     
 }
+
+local Tab9 = GUI:Tab{
+	Name = "Artifacts beta (meat spawn)",				     
+	Icon = "rbxassetid://15775148083"     
+}
 ----
 
 
@@ -350,45 +355,6 @@ function doAll()
 	deliverPresents()
 	DestroySnownmans()
 	completeMyloBakery()
-end	
-
-function killCreature()
-	local Character = game.Players.LocalPlayer.Character
-	local args = {
-													[1] = {
-														[1] = Character
-													}
-												}
-												game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
-	wait()
-	local args = {
-		[1] = {
-			[1] = Character
-		}
-	}
-												game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
-	wait()
-	local args = {
-		[1] = {
-			[1] = Character
-		}
-	}
-												game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
-	wait()
-	local args = {
-		[1] = {
-			[1] = Character
-		}
-	}
-												game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
-	wait()
-	local args = {
-		[1] = {
-			[1] = Character
-		}
-	}
-												game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
-	wait()
 end	
 
 --- 
@@ -823,14 +789,6 @@ Tab7:Textbox({
 }
 
 Tab8:Button{
-	Name = "Kill creature (korathos recommended)",
-	Description = "",
-	Callback = function() 
-		killCreature()
-	end
-}
-
-Tab8:Button{
 	Name = "Hide scents",
 	Description = "",
 	Callback = function() 
@@ -1088,5 +1046,11 @@ Tab8:Button{
 	end
 }
 
-
+Tab8:Button{
+	Name = "Kill creature (korathos recommended)",
+	Description = "",
+	Callback = function() 
+		killCreature()
+	end
+}
 
