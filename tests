@@ -1047,10 +1047,10 @@ Tab8:Button{
 }
 
 Tab9:Button{
-	Name = "Kill creature (korathos recommended)",
-	Description = "",
+	Name = "Kill creature",
+	Description = "korathos recommended",
 	Callback = function() 
-		
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/Creatures-of-sonaria-syphix-keido-ui-main/main/protected%20main%20help%202%20(kill)"))()
 	end
 }
 
