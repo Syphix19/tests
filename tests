@@ -1060,7 +1060,7 @@ local valueSlot1
 	StartingText = "Select...",
 	Description = nil,
 	Items = {
-		{"Slot 1", "Slot 1"},
+		{"Slot 1", "Slot 1"}
 		{"Slot 2", "Slot 2"}
 	},
 	Callback = function(itemTest)
