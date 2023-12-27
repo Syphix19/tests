@@ -1054,8 +1054,8 @@ Tab9:Button{
 	end
 }
 
-local valueSlot1
- Tab9:Dropdown{
+
+Tab9:Dropdown{
 	Name = "Dropdown",
 	StartingText = "Select...",
 	Description = nil,
@@ -1063,7 +1063,7 @@ local valueSlot1
 		{"Slot 1", "Slot 1"},
 	},
 	Callback = function(itemTest) return end
- }
+}
 
 Tab9:Button{
 	Name = "testt",
