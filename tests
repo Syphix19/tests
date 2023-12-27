@@ -1145,9 +1145,7 @@ Tab9:Dropdown{
 	StartingText = "Select...",
 	Description = nil,
 	Items = {
-		{"Hello", 1}, 		-- {name, value}
-		12,			-- or just value, which is also automatically taken as name
-		{"Test", "bump the thread pls"}
+		{"Hello"}, 		
 	},
 	Callback = function(item) return end
 }
