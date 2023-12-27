@@ -106,7 +106,7 @@ local Tab8 = GUI:Tab{
 
 local Tab9 = GUI:Tab{
 	Name = "Artifacts beta (meat spawn)",				     
-	Icon = "rbxassetid://15775148083"     
+	Icon = "rbxassetid://15775148046"     
 }
 ----
 
