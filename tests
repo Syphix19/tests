@@ -1,8 +1,7 @@
+local Character = game.Players.LocalPlayer.Character
 local args = {
-    [1] = {
-        [1] = Vector3.new(-1950.3251953125, 530.9525756835938, 1537.5836181640625),
-        [2] = Vector3.new(0.0025994651950895786, 0.9999964237213135, 0.0003845596802420914)
-    }
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Nest"):FireServer(unpack(args))
+                                                [1] = {
+                                                    [1] = Character
+                                                }
+                                            }
+                                            game.ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CharactersDamageRemote"):FireServer(unpack(args))
