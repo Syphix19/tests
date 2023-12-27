@@ -1074,7 +1074,7 @@ Tab9:Button{
 	Callback = function() 
 		GUI:Notification{
 			Title = "Slot 1 :",
-			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.Slot1.Dino.Value,
+			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.itemTest.Dino.Value,
 			Duration = 3,
 			Callback = function() end
 		}
