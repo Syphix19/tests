@@ -105,8 +105,8 @@ local Tab8 = GUI:Tab{
 }
 
 local Tab9 = GUI:Tab{
-	Name = "Artifacts beta (meat spawn)",				     
-	Icon = "rbxassetid://15775148046"     
+	Name = "Artifacts beta (auto)",				     
+	Icon = "rbxassetid://15755618125"     
 }
 ----
 
@@ -1046,34 +1046,107 @@ Tab8:Button{
 	end
 }
 
-Tab9:Button{
-	Name = "Kill creature",
-	Description = "korathos recommended",
-	Callback = function() 
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Syphix19/Creatures-of-sonaria-syphix-keido-ui-main/main/protected%20main%20help%202%20(kill)"))()
-	end
-}
 
-
-Tab9:Dropdown{
-	Name = "Dropdown",
-	StartingText = "Select...",
-	Description = nil,
-	Items = {
-		{"Slot 1", "Slot 1"},
-	},
-	Callback = function(itemTest) return end
-}
-
-Tab9:Button{
-	Name = "testt",
-	Description = "eeeeeee",
+Tab8:Button{
+	Name = "Novus cooldown (may not work)",
+	Description = "",
 	Callback = function() 
 		GUI:Notification{
-			Title = "Slot :",
-			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.Slot1.Dino.Value,
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Novus.NovusTablet.TimerGui.TimerLabel.Text,
 			Duration = 3,
 			Callback = function() end
 		}
 	end
 }
+
+Tab8:Button{
+	Name = "Hellion cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Hellion.HellionTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+Tab8:Button{
+	Name = "Ardor cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Ardor.ArdorTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+Tab8:Button{
+	Name = "Boreal cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Boreal.BorealTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+
+Tab8:Button{
+	Name = "Verdant cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Verdant.VerdantTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+Tab8:Button{
+	Name = "Angelic cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Angelic.AngelicTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+
+Tab8:Button{
+	Name = "Garra cooldown (may not work)",
+	Description = "",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Cooldown :",
+			Text = workspace.Interactions["Warden Shrines"].Garra.GarraTablet.TimerGui.TimerLabel.Text,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
+
+Tab9:Dropdown({
+    Name = "Dropdown",
+    Description = "yeeeeeeeeeeeeeeeeeeeboi",
+    StartingText = "Bodypart",
+    Items = {
+        "Head",
+        "Torso",
+        "Random"
+    }
+})
