@@ -1063,9 +1063,7 @@ local valueSlot1
 		{"Slot 1", "Slot 1"},
 		{"Slot 2", "Slot 2"}
 	},
-	Callback = function(itemTest)
-		valueSlot1 = itemTest
-		 return end
+	Callback = function(itemTest) return end
 }
 
 Tab9:Button{
