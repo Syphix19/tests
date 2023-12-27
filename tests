@@ -1054,3 +1054,26 @@ Tab9:Button{
 	end
 }
 
+
+Tab9:Dropdown{
+	Name = "Dropdown",
+	StartingText = "Select...",
+	Description = nil,
+	Items = {
+		{"Slot 1", "Slot 1"}
+	},
+	Callback = function(itemTest) return end
+}
+
+Tab9:Button{
+	Name = "testt",
+	Description = "eeeeeee",
+	Callback = function() 
+		GUI:Notification{
+			Title = "Slot 1 :",
+			Text = game:GetService("Players").LocalPlayer.PlayerGui.Data.Slot1.Dino.Value,
+			Duration = 3,
+			Callback = function() end
+		}
+	end
+}
