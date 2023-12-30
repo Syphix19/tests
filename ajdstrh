@@ -1,0 +1,14 @@
+ 
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+ 
+local Window = Library:NewWindow("Create a Cart Ride")
+ 
+local Tab1 = Window:NewSection("Upgrades")
+ 
+
+ local speedUpgrade
+Tab1:CreateDropdown("Speed/Acceleration scale", {"Speed/Acceleration scale", "World", "Hello World"}, 1, function(speedScale)
+local speedUpgrade = speedScale
+
+end)
+ 
