@@ -1,0 +1,76 @@
+--DISCORD SERVER : https://discord.gg/JG8dHW9XHK
+
+
+--UI lib
+loadstring(game:HttpGet("https://github.com/Syphix19/ui-library/raw/main/uiLib%20for%20CaCRide"))()
+
+local GUI = Mercury:Create{
+    Name = "Keido ui Create a Cart Ride",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Dark,
+    Link = "https://github.com/Syphix19/ui-library/blob/main/uiLib%20for%20CaCRide"
+}
+----
+
+--Tabs
+local Tab = GUI:Tab{
+	Name = "Upgrades",
+	Icon = "rbxassetid://15811303569"
+}
+
+----
+
+
+--Functions
+
+
+--- 
+
+local turboSpeed
+ Tab:Dropdown{
+	Name = "Turbo speed/acceleration speed",
+	StartingText = "Select...",
+	Description = nil,
+	Items = {
+		{"1", 1},
+        {"2", 2},
+        {"3", 3},
+        {"Disable turbo gamepass", 4},
+
+	},
+	Callback = function(speedScale) 
+    local turboSpeed = speedScale
+    if turboSpeed == 1 then 
+        game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 1
+    elseif turboSpeed == 2 then
+        game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 2
+    elseif turboSpeed == 3 then
+        game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 3
+    elseif turboSpeed == 4 then
+        game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 0
+    end
+    return end
+ }
+
+local brakeSpeed
+ Tab:Dropdown{
+	Name = "Breake scale",
+	StartingText = "Select...",
+	Description = nil,
+	Items = {
+		{"1", 1},
+        {"2", 2},
+        {"Disable brake gamepass", 3},
+
+	},
+	Callback = function(brakeScale) 
+    local brakeSpeed = brakeScale
+    if turboSpeed == 1 then 
+        game:GetService("Players").LocalPlayer.PDF.BrakeUpgrade.Value = 1
+    elseif turboSpeed == 2 then
+        game:GetService("Players").LocalPlayer.PDF.BrakeUpgrade.Value = 2
+    elseif turboSpeed == 3 then
+        game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 0
+    end
+    return end
+ }
