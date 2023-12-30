@@ -1,0 +1,64 @@
+ 
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+ 
+local Window = Library:NewWindow("Create a Cart Ride")
+ 
+local Tab1 = Window:NewSection("Upgrades")
+
+local Tab2 = Window:NewSection("Gamepasses")
+ 
+local Tab3 = Window:NewSection("Other scripts")
+
+ local speedUpgrade
+Tab1:CreateDropdown("Speed/Acceleration scale", {"1", "2", "3", "Disable", "Speed/Acceleration scale"}, 5, function(speedScale)
+local speedUpgrade = speedScale
+if speedUpgrade == "1" then
+    game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 1
+elseif speedUpgrade == "2" then
+    game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 2
+elseif speedUpgrade == "3" then
+    game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 3
+elseif speedUpgrade == "Disable" then
+    game:GetService("Players").LocalPlayer.PDF.SpeedUpgrade.Value = 0
+end
+end)
+ 
+local BrakeUpgrade
+Tab1:CreateDropdown("Brake scale", {"1", "2", "Disable", "Brake scale"}, 4, function(brakeScale)
+local BrakeUpgrade = brakeScale
+if BrakeUpgrade == "1" then
+    game:GetService("Players").LocalPlayer.PDF.BrakeUpgrade.Value = 1
+elseif BrakeUpgrade == "2" then
+    game:GetService("Players").LocalPlayer.PDF.BrakeUpgrade.Value = 2
+elseif BrakeUpgrade == "Disable" then
+    game:GetService("Players").LocalPlayer.PDF.BrakeUpgrade.Value = 0
+end
+end)
+ 
+
+local magnetUpgrade
+Tab1:CreateDropdown("Track magnet", {"On", "Off", "Track magnet"}, 3, function(magnetScale)
+local magnetUpgrade = magnetScale
+if magnetUpgrade == "On" then
+    game:GetService("Players").LocalPlayer.PDF.TrackMagnets.Value = true
+    game:GetService("Players").LocalPlayer.PDF.TrackMagnetsOn.Value = true
+elseif magnetUpgrade == "Off" then
+    game:GetService("Players").LocalPlayer.PDF.TrackMagnetsOn.Value = false
+end
+end)
+ 
+
+Tab3:CreateButton("Insta finish cart ride", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/oceanhong970201/robloxscript/main/Create%20a%20Cart%20Ride.lua"))()
+end)
+
+
+local shiftSprintToggle
+Tab2:CreateToggle("Auto Ez", function(shiftSprintOn)
+    local shiftSprintToggle = shiftSprintOn
+    if shiftSprintToggle == true then
+        game:GetService("Players").LocalPlayer.PDF.SprintShift.Value = true
+    elseif shiftSprintToggle == false then
+        game:GetService("Players").LocalPlayer.PDF.SprintShift = false
+    end
+end)
