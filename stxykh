@@ -1,0 +1,51 @@
+getgenv().autoScents = false
+--GUI
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+local Window = Library:NewWindow("Artifact script")
+
+local Tab1 = Window:NewSection("Main")
+local Tab2 = Window:NewSection("Warden Jewel")
+----
+
+--Functions
+function teleportTo(placeCFrame)
+	local plyr = game.Players.LocalPlayer
+	if plyr.Character then
+		plyr.Character.HumanoidRootPart.CFrame = placeCFrame
+	end
+end
+
+function autoScentHidden()
+    while getgenv().autoScents == true do
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("HideScent"):FireServer()
+        wait(1)
+    end
+end
+----
+
+--Script
+
+local scentLocal
+Tab1:CreateToggle("Hide scents", function(hideScents)
+    local scentLocal = hideScents
+    if scentLocal == true then
+        getgenv().autoScents = true     
+        autoScentHidden()
+    elseif scentLocal == false then
+        getgenv().autoScents = false
+    end
+end)
+
+Tab1:CreateButton("Safe place (load flower cove)", function()
+    teleportTo(workspace.Terrain["Warden Shrines"].Verdant:GetChildren()[5].CFrame)
+end)
+
+local eigionDropdown
+Tab2:CreateDropdown("Eigion", {"Sacrifice food", "Progression"},  0, function(itemCreatureEigion)
+    eigionDropdown = itemCreatureEigion
+end)
+
+
+
+
