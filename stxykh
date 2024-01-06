@@ -42,7 +42,7 @@ Tab1:CreateButton("Safe place (load flower cove)", function()
 end)
 
 local eigionDropdown
-Tab2:CreateDropdown("Eigion", {"Sacrifice food", "Progression"},  0, function(itemCreatureEigion)
+Tab2:CreateDropdown("Eigion", {"Sacrifice food", "Progression"},  1, function(itemCreatureEigion)
     eigionDropdown = itemCreatureEigion
 end)
 
