@@ -1,0 +1,578 @@
+
+    -- Wait until the game loads
+    if not game:IsLoaded() then
+        game.Loaded:Wait()
+    end
+
+    -- Roblox Services
+    local MarketplaceService = game:GetService("MarketplaceService")
+    local SoundService = game:GetService("SoundService")
+    local RunService = game:GetService("RunService")
+    local VirtualUser = game:GetService("VirtualUser")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local ContextActionService = game:GetService("ContextActionService")
+    local StarterGui = game:GetService("StarterGui")
+    local UserInputService = game:GetService("UserInputService")
+    local Http = game:GetService("HttpService")
+    local TPS = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    local Lighting = game:GetService("Lighting")
+    local Workspace = game:GetService("Workspace")
+    local Api = "https://games.roblox.com/v1/games/"
+
+    -- Variables
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+    local PlayerData
+    local PlayerEffectsData = nil
+    local PlaceId = game.PlaceId
+    local JobId = game.JobId
+    local RemoteEvents = ReplicatedStorage:WaitForChild("Remotes")
+    local mt = getrawmetatable(game)
+    setreadonly(mt, false)
+
+    -- Main Script Module
+    local ScriptValues = {
+        ScriptVersion = "v3.1",
+        ScriptOwner = "Mangnex",
+        FolderName = "Lycan-X Hub",
+        SettingsFile = "CoS_Loader.json",
+        AutoLoadSettings = getgenv().AutoLoadConfigurations or false,
+        NotificationSoundId = 1760921747,
+        WarningSoundId = 3165700530,
+        ErrorSoundId = 5188022160,
+        SupportedExecutors = {"Synapse X", "Codex", "Delta", "Electron", "Fluxus", "Valyse"},
+        ExecutorsIdentifier = {
+            "Fingerprint",
+            "Krnl-Fingerprint",
+            "Syn-Fingerprint",
+            "SW-Fingerprint",
+            "Flux-Fingerprint",
+            "Valyse-Fingerprint",
+            "Electron-Fingerprint",
+            "Delta-Figerprint"
+        },
+        DisconnectTypes = {{"ban", {"ban", "perm"}}, {"network", {"internet connection", "network"}}},
+        AdministratorRoles = {"💎Administrator", "⭐Friends/Family", "Testing", "️🛠️Developer", "👑Co-Owner", "👑Owner"},
+        RoleCaution = {"❤️Contributor", "📝Tester", "Community Artist", "🎥Content Creator"}
+    }
+
+    local GameValues = {
+        Stats_Values = {
+            FoodType = "Omnivore",
+            Stats = "Land",
+            WalkSpeed = 100,
+            SprintSpeed = 100,
+            TurnRadius = 1,
+            FlySpeed = 0,
+            BiteCooldown = 2
+        },
+    }
+
+    local SelectTokens = {}
+
+    local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+    local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+    local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+    local Options = Fluent.Options
+
+    local Window = Fluent:CreateWindow({
+        Title = "Lycan-X Hub | Cos Recode Script ".. ScriptValues.ScriptVersion .."",
+        SubTitle = "by ".. ScriptValues.ScriptOwner .."",
+        TabWidth = 160,
+        Size = UDim2.fromOffset(580, 400),
+        Acrylic = true, 
+        Theme = "Dark",
+        MinimizeKey = Enum.KeyCode.Q    
+    })
+
+    if not _G.AlreadyExecuted == true then
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Parent = game.CoreGui
+
+        local CloseButton = Instance.new("ImageButton")
+        CloseButton.Parent = screenGui
+        CloseButton.Position = UDim2.new(0.01, 0, 0.3, 0)
+        CloseButton.Size = UDim2.new(0, 43, 0, 43)
+        CloseButton.BackgroundTransparency = 0
+        CloseButton.Image = "rbxassetid://14076923102"
+        CloseButton.BackgroundColor3 = Color3.new(0, 0, 0)
+        CloseButton.BorderColor3 = Color3.new(1, 1, 1)
+        CloseButton.ClipsDescendants = true
+
+        local UICorner = Instance.new("UICorner")
+        UICorner.Parent = CloseButton
+
+        local UIStroke = Instance.new("UIStroke")
+        UIStroke.Parent = CloseButton
+        UIStroke.Thickness = 2
+
+        CloseButton.MouseButton1Click:Connect(
+            function()
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Q, false, game)
+            end
+        )       
+    end
+
+    _G.AlreadyExecuted = true
+
+    local Tabs = {
+        Main = Window:AddTab({ Title = "Main", Icon = "home" }),
+        CustomStats = Window:AddTab({ Title = "Custom Stats", Icon = "rocket" }),
+        AutoFarm = Window:AddTab({ Title = "AutoFarm", Icon = "bot" }),
+        ArtifactAutoFarm = Window:AddTab({ Title = "Artifact AutoFarm", Icon = "slack" }),
+        Teleports = Window:AddTab({ Title = "Teleports", Icon = "map-pin" }),
+        Event = Window:AddTab({ Title = "Event", Icon = "heart" }), --calender-clock
+        Esp = Window:AddTab({ Title = "Esp", Icon = "locate-fixed" }),
+        Others = Window:AddTab({ Title = "Others", Icon = "settings" }),
+    }
+
+    Tabs.Event:AddParagraph({
+        Title = "Valentine Day Event (09/02/24)"
+    })
+
+    SaveManager:SetLibrary(Fluent)
+    InterfaceManager:SetLibrary(Fluent)
+
+    SaveManager:IgnoreThemeSettings()
+
+    SaveManager:SetIgnoreIndexes({})
+
+    Window:SelectTab(1)
+    SaveManager:BuildConfigSection(Tabs.Others)
+
+    local NotificationSound
+    local WarningSound
+    local ErrorSound
+
+    NotificationSound = Instance.new("Sound")
+    NotificationSound.Name = "NotificationSound"
+    NotificationSound.SoundId = "rbxassetid://" .. ScriptValues.NotificationSoundId
+    NotificationSound.Volume = 2
+    NotificationSound.Parent = SoundService
+
+    WarningSound = Instance.new("Sound")
+    WarningSound.Name = "WarningSound"
+    WarningSound.SoundId = "rbxassetid://" .. ScriptValues.WarningSoundId
+    WarningSound.Volume = 2
+    WarningSound.Parent = SoundService
+
+    ErrorSound = Instance.new("Sound")
+    ErrorSound.Name = "ErrorSound"
+    ErrorSound.SoundId = "rbxassetid://" .. ScriptValues.ErrorSoundId
+    ErrorSound.Volume = 2
+    ErrorSound.Parent = SoundService
+
+    local function Notification(SoundType, Text)
+        if SoundType == "Notification" then
+            NotificationSound:Play()
+            Fluent:Notify({
+                Title = "Notification",
+                Content = Text,
+                Duration = 5
+            })
+        elseif SoundType == "Warning" then
+            WarningSound:Play()
+            Fluent:Notify({
+                Title = "Warning",
+                Content = Text,
+                Duration = 5
+            })
+        elseif SoundType == "Error" then
+            ErrorSound:Play()
+            Fluent:Notify({
+                Title = "Error",
+                Content = Text,
+                Duration = 5
+            })
+        end
+    end
+
+    -- Get Creature Stats
+    if Character and PlayerData then
+        PlayerData = Workspace.Characters[LocalPlayer.Name].Data
+        GameValues.Stats_Values.FoodType = PlayerData:GetAttribute("ft")
+        GameValues.Stats_Values.Stats = PlayerData:GetAttribute("ct")
+        GameValues.Stats_Values.BiteCooldown = PlayerData:GetAttribute("BiteCooldown")
+        GameValues.Stats_Values.TurnRadius = PlayerData:GetAttribute("tr")
+        GameValues.Stats_Values.WalkSpeed = math.round(PlayerData:GetAttribute("s"))
+        GameValues.Stats_Values.SprintSpeed = math.round(PlayerData:GetAttribute("ss"))
+        if PlayerData and PlayerData:GetAttribute("fs") then
+            GameValues.Stats_Values.FlySpeed = math.round(PlayerData:GetAttribute("fs"))
+        end
+    end
+
+    -- Functions
+    local function GetPlayerData()
+        pcall(
+            function()
+                Character = LocalPlayer.Character
+                if Character then
+                    PlayerData = workspace.Characters[LocalPlayer.Name].Data
+                    PlayerEffectsData = Workspace.Characters[LocalPlayer.Name].Ailments
+                    GameValues.Stats_Values.FoodType = PlayerData:GetAttribute("ft")
+                    GameValues.Stats_Values.Stats = PlayerData:GetAttribute("ct")
+                end
+            end
+        )
+    end
+
+    RunService.Heartbeat:Connect(GetPlayerData)
+
+    local function AutoCollectGachaTokensTp(tokens)
+        local OriginalPosition = Character.HumanoidRootPart.Position
+
+        for i, v in ipairs(tokens) do
+            local Token = Workspace.Interactions.SpawnedTokens:FindFirstChild(v)
+            if Token then
+                local TokenPosition = Token.Position
+                Character.HumanoidRootPart.CFrame = CFrame.new(TokenPosition)
+                task.wait(2)
+                local TokenExists = Workspace.Interactions.SpawnedTokens:FindFirstChild(v) ~= nil
+                if TokenExists then
+                    VirtualInputManager:SendKeyEvent(true, "E", false, game)
+                    task.wait(1)
+                end
+                Notification("Notification", "An " .. v .. " has been collected!")
+                Character.HumanoidRootPart.CFrame = CFrame.new(OriginalPosition)
+            end
+        end
+    end
+
+    local function AutoCollectGachaTokensNoTp()
+        for i, v in ipairs(SelectTokens) do
+            local Token = Workspace.Interactions.SpawnedTokens:FindFirstChild(v)
+            if Token then
+                local TokenExists = Workspace.Interactions.SpawnedTokens:FindFirstChild(v) ~= nil
+                if TokenExists then
+                    RemoteEvents:WaitForChild("GetSpawnedTokenRemote"):InvokeServer()
+                    task.wait(1)
+                    Token:Destroy()
+                end
+                Notification("Notification", "An " .. v .. " has been collected!")
+                break
+            end
+        end
+    end
+
+    local function NearestFood()
+        local CurrentStats = GameValues.Stats_Values.Stats
+        local CurrentFoodType = GameValues.Stats_Values.FoodType
+        local PossibleFood = {}
+        local TargetDistance = math.huge
+        local Target
+
+        if CurrentStats == "Flier" or CurrentStats == "Land" then
+            if CurrentFoodType == "Carnivore" or CurrentFoodType == "Omnivore" then
+                table.insert(PossibleFood, "Chunk")
+                table.insert(PossibleFood, "Carnivore Carcass")
+                table.insert(PossibleFood, "Carcass")
+                table.insert(PossibleFood, "Herbivore Carcass")
+            end
+            if CurrentFoodType == "Herbivore" or CurrentFoodType == "Omnivore" then
+                table.insert(PossibleFood, "Berries")
+                table.insert(PossibleFood, "Grass")
+                table.insert(PossibleFood, "Fruit")
+            end
+        elseif CurrentStats == "Aquatic" or CurrentStats == "SemiAquatic" then
+            if CurrentFoodType == "Carnivore" or CurrentFoodType == "Omnivore" then
+                table.insert(PossibleFood, "Ribs")
+            end
+            if CurrentFoodType == "Herbivore" or CurrentFoodType == "Omnivore" then
+                table.insert(PossibleFood, "Seaweed Pods")
+                table.insert(PossibleFood, "Algae")
+            end
+        end
+
+        for i, v in ipairs(Workspace.Interactions.Food:GetChildren()) do
+            if table.find(PossibleFood, v.Name) then
+                local FoodPart = v:FindFirstChild("Food")
+                if FoodPart then
+                    local Distance = (Character.HumanoidRootPart.Position - FoodPart.Position).Magnitude
+                    local FoodValue = v:GetAttribute("Value")
+                    if Distance < TargetDistance and FoodValue ~= 0 then
+                        TargetDistance = Distance
+                        Target = v
+                    end
+                end
+            end
+        end
+        return Target
+    end
+
+    local function FindNearestPlayer()
+        local GetPlayers = Players:GetPlayers()
+        local TargetDistance = math.huge
+        local Target
+
+        if not Character then
+            return nil
+        end
+
+        for _, v in ipairs(GetPlayers) do
+            if v ~= LocalPlayer then
+                local SelectedPlayer = v.Character
+                if SelectedPlayer and SelectedPlayer.PrimaryPart then
+                    local Distance = (Character.HumanoidRootPart.Position - SelectedPlayer.PrimaryPart.Position).Magnitude
+                    if Distance < TargetDistance then
+                        TargetDistance = Distance
+                        Target = v
+                    end
+                end
+            end
+        end
+
+        return Target
+    end
+
+    local function GetMail()
+        local OriginalPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        local MailPosition = Vector3.new(1889, 237, 588)
+
+        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(MailPosition))
+        
+        local Mail = workspace:WaitForChild("Valentine Event", math.huge):WaitForChild("VolcanoMail", math.huge)
+        
+        RemoteEvents:WaitForChild("GetLetterRemote"):InvokeServer(workspace:WaitForChild("Valentine Event"):WaitForChild("VolcanoMail"))
+        task.wait(0.1)       
+        RemoteEvents:WaitForChild("DeliverLetterRemote"):FireServer(workspace:WaitForChild("Valentine Event"):WaitForChild("Mailbox"):WaitForChild("Mailbox"))
+        
+        LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(OriginalPosition))
+    end
+
+    local playerRemovingConnection = {}
+    local EspEnable = false
+    local playerNameTags = {}
+
+    function createPlayerNameTag(player)
+        local character = player.Character
+        if character then
+            local playerNameTag = Instance.new("BillboardGui")
+            playerNameTag.Name = "PlayerNameTag"
+            playerNameTag.Size = UDim2.new(0, 150, 0, 60)
+            playerNameTag.Adornee = character:FindFirstChild("Head")
+            playerNameTag.AlwaysOnTop = true
+            playerNameTag.StudsOffset = Vector3.new(0, 2, 0)
+
+            local playerNameLabel = Instance.new("TextLabel")
+            playerNameLabel.Name = "PlayerNameLabel"
+            playerNameLabel.Text = player.Name
+            playerNameLabel.Font = Enum.Font.FredokaOne
+            playerNameLabel.FontSize = Enum.FontSize.Size12
+            playerNameLabel.Size = UDim2.new(1, 0, 0.2, 0)
+            playerNameLabel.TextStrokeTransparency = 0.5
+            playerNameLabel.TextColor3 = Color3.new(1, 1, 1)
+            playerNameLabel.BackgroundTransparency = 1
+            playerNameLabel.Parent = playerNameTag
+
+            local characterNameLabel = Instance.new("TextLabel")
+            characterNameLabel.Name = "CharacterNameLabel"
+            characterNameLabel.Text = "Species: " .. character.Data:GetAttribute("Species")
+            characterNameLabel.Font = Enum.Font.FredokaOne
+            characterNameLabel.FontSize = Enum.FontSize.Size12
+            characterNameLabel.Size = UDim2.new(1, 0, 0.2, 0)
+            characterNameLabel.Position = UDim2.new(0, 0, 0.25, 0)
+            characterNameLabel.TextStrokeTransparency = 0.5
+            characterNameLabel.TextColor3 = Color3.new(1, 1, 1)
+            characterNameLabel.BackgroundTransparency = 1
+            characterNameLabel.Parent = playerNameTag
+
+            local healthLabel = Instance.new("TextLabel")
+            healthLabel.Name = "HealthLabel"
+            if character and character.Data:GetAttribute("h") then
+                healthLabel.Text = "Health: " .. math.round(character.Data:GetAttribute("h"))
+            else
+                healthLabel.Text = "Health: N/A"
+            end
+            healthLabel.Font = Enum.Font.FredokaOne
+            healthLabel.FontSize = Enum.FontSize.Size12
+            healthLabel.Size = UDim2.new(1, 0, 0.2, 0)
+            healthLabel.Position = UDim2.new(0, 0, 0.5, 0)
+            healthLabel.TextStrokeTransparency = 0.5
+            healthLabel.TextColor3 = Color3.new(1, 1, 1)
+            healthLabel.BackgroundTransparency = 1
+            healthLabel.Parent = playerNameTag
+
+            playerNameTag.Parent = game.Workspace.CurrentCamera
+
+            playerNameTags[player] = playerNameTag
+
+            playerRemovingConnection =
+                player.Removing:Connect(
+                function()
+                    removePlayerNameTag(player)
+                    playerRemovingConnection:Disconnect()
+                end
+            )
+        end
+    end
+
+    function removePlayerNameTag(player)
+        local playerNameTag = playerNameTags[player]
+        if playerNameTag then
+            playerNameTag:Destroy()
+            playerNameTags[player] = nil
+        end
+    end
+
+    function updatePlayerNames()
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and Character then
+                if EspEnable then
+                    if not playerNameTags[player] then
+                        createPlayerNameTag(player)
+                    end
+                elseif playerNameTags[player] then
+                    removePlayerNameTag(player)
+                end
+            elseif playerNameTags[player] then
+                removePlayerNameTag(player)
+            end
+        end
+    end
+
+    function updatePlayerNames()
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and Character then
+                if EspEnable then
+                    if not playerNameTags[player] then
+                        createPlayerNameTag(player)
+                    end
+                elseif playerNameTags[player] then
+                    removePlayerNameTag(player)
+                end
+            elseif playerNameTags[player] then
+                removePlayerNameTag(player)
+            end
+        end
+    end
+
+    local function FPSCount()
+        Back = Drawing.new("Square")
+        Back.Color = Color3.fromRGB(20, 20, 20)
+        Back.Position =
+            Vector2.new(
+            game:GetService("Workspace").CurrentCamera.ViewportSize.X / 2.24,
+            game:GetService("Workspace").CurrentCamera.ViewportSize.Y / 1000
+        )
+        Back.Size = Vector2.new(180, 35)
+        Back.Transparency = 0.5
+        Back.Visible = true
+        Back.Filled = true
+
+        Fps = Drawing.new("Text")
+        Fps.Text = ""
+        Fps.Color = Color3.fromRGB(200, 200, 200)
+        Fps.Position =
+            Vector2.new(
+            game:GetService("Workspace").CurrentCamera.ViewportSize.X / 2.22,
+            game:GetService("Workspace").CurrentCamera.ViewportSize.Y / 1000
+        )
+        Fps.Size = 30
+        Fps.Visible = true
+        game.Stats:WaitForChild("Network")
+        game.Stats.Network:WaitForChild("ServerStatsItem")
+        game.Stats.Network.ServerStatsItem:WaitForChild("Data Ping")
+
+        while wait(0.1) do
+            ping = string.split(string.split(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), " ")[1], ".")
+            fps = string.split(game.Stats.Workspace.Heartbeat:GetValueString(), ".")
+            Fps.Text = "FPS " .. fps[1] .. "  Ping " .. ping[1]
+            if tonumber(fps[1]) < 40 then
+                Fps.Color = Color3.fromRGB(255, 100, 100)
+            end
+            if tonumber(ping[1]) and tonumber(ping[1]) > 400 then
+                Fps.Color = Color3.fromRGB(255, 40, 40)
+            end
+            if tonumber(fps[1]) > 40 and tonumber(ping[1]) and tonumber(ping[1]) < 400 then
+                Fps.Color = Color3.fromRGB(200, 200, 200)
+            end
+        end
+    end
+
+    -- UI Variables
+    local AutoMudRollValue
+    local AutoEatValue
+    local AutoDrinkValue
+    local AutoGachaTokensNoTpValue
+    local AutoGachaTokensTpValue
+    local AutoHideValue
+    local AutoMissionsValue
+    local NoMeteorDamageValue
+    local InfStaminaValue
+    local NoLavaDamageValue
+    local NoDrowningDamageValue
+    local InstReturnValue = false
+    local HWCompleted = false
+    local AWCompleted = false
+    local GWCompleted = false
+    local VWCompleted = false
+    local BWCompleted = false
+    local EWCompleted = false
+    local NWCompleted = false
+    local ARWCompleted = false
+    local ReviveCreatures = {}
+    local FoodNames = {"Carnivore Carcass", "Herbivore Carcass", "Omnivore Carcass", "Chunk", "Carcass"}
+
+    local ReviveAllDeadCreatures = Tabs.Main:AddButton({
+        Title = "Revive All Dead Creatures", 
+        Description = "Using this function will reset the creature's death stat!",
+        Callback = function()
+            local DataFolder = PlayerGui.Data
+            local SlotsFrame = PlayerGui.SaveSelectionGui.ContainerFrame.AllSlotsFrame.SlotsFrame
+
+            local Slots = {"Slot1", "Slot2", "Slot3"}
+            local DeadCreatures = 0
+
+            for i = 1, 3 do
+                local Slot = SlotsFrame[tostring(i)]
+                local CreatureFrame = Slot.InnerFrame.CreatureFrame
+                local CreatureName = CreatureFrame.NameLabel.Text
+                local HealthFrame = Slot.InnerFrame.CreatureFrame.StatsFrame.Health
+                local MaxHealth = HealthFrame.Max.Text:gsub("/", "")
+            
+                if CreatureFrame.Visible == true then
+                    local creatureData = {
+                        Name = CreatureName,
+                        MaxHealth = tonumber(MaxHealth),
+                    }
+            
+                    table.insert(ReviveCreatures, creatureData)
+                end
+            end 
+            
+            local function CheckDeadCreature(Data)
+                local Dino = Data:FindFirstChild("Dino")
+                local Health = Data:FindFirstChild("Health")
+            
+                if Dino then
+                    for _, v in ipairs(ReviveCreatures) do
+                        if Dino.Value == v.Name and Health.Value == 0 then
+                            Health.Value = v.MaxHealth
+                            DeadCreatures = DeadCreatures + 1
+                        end
+                    end
+                end
+            end
+            
+            for _, Slots in pairs(DataFolder.Slots:GetChildren()) do
+                CheckDeadCreature(Slots)
+            end
+            
+            for _, Slot in pairs(Slots) do
+                local CreatureSlots = DataFolder[Slot]
+            
+                if CreatureSlots then
+                    CheckDeadCreature(CreatureSlots)
+                end
+            end        
+
+            if DeadCreatures > 0 then
+                Notification("Notification", "" .. DeadCreatures .. " creatures were successfully revived!")
+            else
+                Notification("Error", "There are no dead creatures!")
+            end
+    end})
