@@ -1,0 +1,423 @@
+
+    -- Wait until the game loads
+    if not game:IsLoaded() then
+        game.Loaded:Wait()
+    end
+
+    -- Roblox Services
+    local MarketplaceService = game:GetService("MarketplaceService")
+    local SoundService = game:GetService("SoundService")
+    local RunService = game:GetService("RunService")
+    local VirtualUser = game:GetService("VirtualUser")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local ContextActionService = game:GetService("ContextActionService")
+    local StarterGui = game:GetService("StarterGui")
+    local UserInputService = game:GetService("UserInputService")
+    local Http = game:GetService("HttpService")
+    local TPS = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+    local VirtualInputManager = game:GetService("VirtualInputManager")
+    local Lighting = game:GetService("Lighting")
+    local Workspace = game:GetService("Workspace")
+    local Api = "https://games.roblox.com/v1/games/"
+
+    -- Variables
+    local LocalPlayer = Players.LocalPlayer
+    local Character = LocalPlayer.Character
+    local PlayerData
+    local PlayerEffectsData = nil
+    local PlaceId = game.PlaceId
+    local JobId = game.JobId
+    local RemoteEvents = ReplicatedStorage:WaitForChild("Remotes")
+    local mt = getrawmetatable(game)
+    setreadonly(mt, false)
+
+    -- Main Script Module
+    local ScriptValues = {
+        ScriptVersion = "v0",
+        ScriptOwner = "Syphix",
+        FolderName = "Keido ui (Fluent)",
+        SettingsFile = "CoS_Loader.json",
+        AutoLoadSettings = getgenv().AutoLoadConfigurations or false,
+        NotificationSoundId = 1760921747,
+        WarningSoundId = 3165700530,
+        ErrorSoundId = 5188022160,
+        SupportedExecutors = {"Synapse X", "Codex", "Delta", "Electron", "Fluxus", "Valyse"},
+        ExecutorsIdentifier = {
+            "Fingerprint",
+            "Krnl-Fingerprint",
+            "Syn-Fingerprint",
+            "SW-Fingerprint",
+            "Flux-Fingerprint",
+            "Valyse-Fingerprint",
+            "Electron-Fingerprint",
+            "Delta-Figerprint"
+        },
+        DisconnectTypes = {{"ban", {"ban", "perm"}}, {"network", {"internet connection", "network"}}},
+        AdministratorRoles = {"💎Administrator", "⭐Friends/Family", "Testing", "️🛠️Developer", "👑Co-Owner", "👑Owner"},
+        RoleCaution = {"❤️Contributor", "📝Tester", "Community Artist", "🎥Content Creator"}
+    }
+
+    local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+    local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+    local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+    local Options = Fluent.Options
+
+    local Window = Fluent:CreateWindow({
+        Title = "Keido ui | Cos Recode Script ".. ScriptValues.ScriptVersion .."",
+        SubTitle = "by ".. ScriptValues.ScriptOwner .."",
+        TabWidth = 160,
+        Size = UDim2.fromOffset(580, 400),
+        Acrylic = true, 
+        Theme = "Dark",
+        MinimizeKey = Enum.KeyCode.Q    
+    })
+
+    if not _G.AlreadyExecuted == true then
+        local screenGui = Instance.new("ScreenGui")
+        screenGui.Parent = game.CoreGui
+
+        local CloseButton = Instance.new("ImageButton")
+        CloseButton.Parent = screenGui
+        CloseButton.Position = UDim2.new(0.01, 0, 0.3, 0)
+        CloseButton.Size = UDim2.new(0, 43, 0, 43)
+        CloseButton.BackgroundTransparency = 0
+        CloseButton.Image = "rbxassetid://14076923102"
+        CloseButton.BackgroundColor3 = Color3.new(0, 0, 0)
+        CloseButton.BorderColor3 = Color3.new(1, 1, 1)
+        CloseButton.ClipsDescendants = true
+
+        local UICorner = Instance.new("UICorner")
+        UICorner.Parent = CloseButton
+
+        local UIStroke = Instance.new("UIStroke")
+        UIStroke.Parent = CloseButton
+        UIStroke.Thickness = 2
+
+        CloseButton.MouseButton1Click:Connect(
+            function()
+                VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Q, false, game)
+            end
+        )       
+    end
+
+    _G.AlreadyExecuted = true
+
+    local Tabs = {
+        Main = Window:AddTab({ Title = "Main", Icon = "home" }),
+        CustomStats = Window:AddTab({ Title = "Custom Stats", Icon = "rocket" }),
+        AutoFarm = Window:AddTab({ Title = "AutoFarm", Icon = "bot" }),
+        ArtifactAutoFarm = Window:AddTab({ Title = "Artifact AutoFarm", Icon = "slack" }),
+        Teleports = Window:AddTab({ Title = "Teleports", Icon = "map-pin" }),
+        Event = Window:AddTab({ Title = "Event", Icon = "heart" }), --calender-clock
+        Esp = Window:AddTab({ Title = "Esp", Icon = "locate-fixed" }),
+        Others = Window:AddTab({ Title = "Others", Icon = "settings" }),
+    }
+
+    Tabs.Event:AddParagraph({
+        Title = "Valentine Day Event (09/02/24)"
+    })
+
+    SaveManager:SetLibrary(Fluent)
+    InterfaceManager:SetLibrary(Fluent)
+
+    SaveManager:IgnoreThemeSettings()
+
+    SaveManager:SetIgnoreIndexes({})
+
+    Window:SelectTab(1)
+    SaveManager:BuildConfigSection(Tabs.Others)
+
+    local NotificationSound
+    local WarningSound
+    local ErrorSound
+
+    NotificationSound = Instance.new("Sound")
+    NotificationSound.Name = "NotificationSound"
+    NotificationSound.SoundId = "rbxassetid://" .. ScriptValues.NotificationSoundId
+    NotificationSound.Volume = 2
+    NotificationSound.Parent = SoundService
+
+    WarningSound = Instance.new("Sound")
+    WarningSound.Name = "WarningSound"
+    WarningSound.SoundId = "rbxassetid://" .. ScriptValues.WarningSoundId
+    WarningSound.Volume = 2
+    WarningSound.Parent = SoundService
+
+    ErrorSound = Instance.new("Sound")
+    ErrorSound.Name = "ErrorSound"
+    ErrorSound.SoundId = "rbxassetid://" .. ScriptValues.ErrorSoundId
+    ErrorSound.Volume = 2
+    ErrorSound.Parent = SoundService
+
+    local function Notification(SoundType, Text)
+        if SoundType == "Notification" then
+            NotificationSound:Play()
+            Fluent:Notify({
+                Title = "Notification",
+                Content = Text,
+                Duration = 5
+            })
+        elseif SoundType == "Warning" then
+            WarningSound:Play()
+            Fluent:Notify({
+                Title = "Warning",
+                Content = Text,
+                Duration = 5
+            })
+        elseif SoundType == "Error" then
+            ErrorSound:Play()
+            Fluent:Notify({
+                Title = "Error",
+                Content = Text,
+                Duration = 5
+            })
+        end
+    end
+
+    -- Get Creature Stats
+    if Character and PlayerData then
+        PlayerData = Workspace.Characters[LocalPlayer.Name].Data
+        GameValues.Stats_Values.FoodType = PlayerData:GetAttribute("ft")
+        GameValues.Stats_Values.Stats = PlayerData:GetAttribute("ct")
+        GameValues.Stats_Values.BiteCooldown = PlayerData:GetAttribute("BiteCooldown")
+        GameValues.Stats_Values.TurnRadius = PlayerData:GetAttribute("tr")
+        GameValues.Stats_Values.WalkSpeed = math.round(PlayerData:GetAttribute("s"))
+        GameValues.Stats_Values.SprintSpeed = math.round(PlayerData:GetAttribute("ss"))
+        if PlayerData and PlayerData:GetAttribute("fs") then
+            GameValues.Stats_Values.FlySpeed = math.round(PlayerData:GetAttribute("fs"))
+        end
+    end
+
+    -- Functions
+
+    local function FPSCount()
+        local Back = Drawing.new("Square")
+        Back.Color = Color3.fromRGB(20, 20, 20)
+        Back.Position =
+            Vector2.new(
+            game:GetService("Workspace").CurrentCamera.ViewportSize.X / 2.24,
+            game:GetService("Workspace").CurrentCamera.ViewportSize.Y / 1000
+        )
+        Back.Size = Vector2.new(180, 35)
+        Back.Transparency = 0.5
+        Back.Visible = true
+        Back.Filled = true
+
+        local Fps = Drawing.new("Text")
+        Fps.Text = ""
+        Fps.Color = Color3.fromRGB(200, 200, 200)
+        Fps.Position =
+            Vector2.new(
+            game:GetService("Workspace").CurrentCamera.ViewportSize.X / 2.22,
+            game:GetService("Workspace").CurrentCamera.ViewportSize.Y / 1000
+        )
+        Fps.Size = 30
+        Fps.Visible = true
+        game.Stats:WaitForChild("Network")
+        game.Stats.Network:WaitForChild("ServerStatsItem")
+        game.Stats.Network.ServerStatsItem:WaitForChild("Data Ping")
+
+        while wait(0.1) do
+            ping = string.split(string.split(game.Stats.Network.ServerStatsItem["Data Ping"]:GetValueString(), " ")[1], ".")
+            fps = string.split(game.Stats.Workspace.Heartbeat:GetValueString(), ".")
+            Fps.Text = "FPS " .. fps[1] .. "  Ping " .. ping[1]
+            if tonumber(fps[1]) < 40 then
+                Fps.Color = Color3.fromRGB(255, 100, 100)
+            end
+            if tonumber(ping[1]) and tonumber(ping[1]) > 400 then
+                Fps.Color = Color3.fromRGB(255, 40, 40)
+            end
+            if tonumber(fps[1]) > 40 and tonumber(ping[1]) and tonumber(ping[1]) < 400 then
+                Fps.Color = Color3.fromRGB(200, 200, 200)
+            end
+        end
+    end
+
+---------------
+
+
+    -- UI Variables
+
+----------------
+
+
+
+
+    local FPSPingcount = Tabs.Others:AddButton({
+        Title = "FPS / Ping count", 
+        Callback = function()
+            NotificationSound:Play()
+            FPSCount()
+    end})
+
+    local AntiAfk = Tabs.Others:AddButton({
+        Title = "Anti Afk", 
+        Callback = function()
+            NotificationSound:Play()
+            LocalPlayer.Idled:connect(
+                function()
+                    VirtualUser:CaptureController()
+                    VirtualUser:ClickButton2(Vector2.new())
+                end
+            )
+    end})
+
+    local RejoinServer = Tabs.Others:AddButton({
+        Title = "Rejoin Server", 
+        Callback = function()
+            NotificationSound:Play()
+            TPS:Teleport(PlaceId, LocalPlayer)
+    end})
+
+    local TeleportFewPeople = Tabs.Others:AddButton({
+        Title = "Teleport to a server with few people", 
+        Callback = function()
+            NotificationSound:Play()
+            local _place = PlaceId
+            local _servers = Api .. _place .. "/servers/Public?sortOrder=Asc&limit=100"
+            function ListServers(cursor)
+                local Raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
+                return Http:JSONDecode(Raw)
+            end
+
+            local Server, Next
+            repeat
+                local Servers = ListServers(Next)
+                Server = Servers.data[1]
+                Next = Servers.nextPageCursor
+            until Server
+
+            TPS:TeleportToPlaceInstance(_place, Server.id, LocalPlayer)
+    end})
+
+    local LowQualityTextures = Tabs.Others:AddButton({
+        Title = "Low Quality Textures", 
+        Callback = function()
+            NotificationSound:Play()
+            for _, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+                if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
+                    v.Material = "SmoothPlastic"
+                    if v:IsA("Texture") then
+                        v:Destroy()
+                    end
+                end
+            end
+    end})
+
+    local HopServer = Tabs.Others:AddButton({
+        Title = "Hop Server (Never the same servers) ", 
+        Callback = function()
+            NotificationSound:Play()
+            local PlaceID = PlaceId
+            local AllIDs = {}
+            local foundAnything = ""
+            local actualHour = os.date("!*t").hour
+            local Deleted = false
+            local File =
+                pcall(
+                function()
+                    AllIDs = game:GetService("HttpService"):JSONDecode(readfile("NotSameServers.json"))
+                end
+            )
+            if not File then
+                table.insert(AllIDs, actualHour)
+                writefile("NotSameServers.json", game:GetService("HttpService"):JSONEncode(AllIDs))
+            end
+            local function TPReturner()
+                local Site
+                if foundAnything == "" then
+                    Site =
+                        game.HttpService:JSONDecode(
+                        game:HttpGet(
+                            "https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"
+                        )
+                    )
+                else
+                    Site =
+                        game.HttpService:JSONDecode(
+                        game:HttpGet(
+                            "https://games.roblox.com/v1/games/" ..
+                                PlaceID .. "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. foundAnything
+                        )
+                    )
+                end
+                local ID = ""
+                if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                    foundAnything = Site.nextPageCursor
+                end
+                local num = 0
+                for i, v in pairs(Site.data) do
+                    local Possible = true
+                    ID = tostring(v.id)
+                    if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                        for _, Existing in pairs(AllIDs) do
+                            if num ~= 0 then
+                                if ID == tostring(Existing) then
+                                    Possible = false
+                                end
+                            else
+                                if tonumber(actualHour) ~= tonumber(Existing) then
+                                    local delFile =
+                                        pcall(
+                                        function()
+                                            delfile("NotSameServers.json")
+                                            AllIDs = {}
+                                            table.insert(AllIDs, actualHour)
+                                        end
+                                    )
+                                end
+                            end
+                            num = num + 1
+                        end
+                        if Possible == true then
+                            table.insert(AllIDs, ID)
+                            wait()
+                            pcall(
+                                function()
+                                    writefile("NotSameServers.json", game:GetService("HttpService"):JSONEncode(AllIDs))
+                                    wait()
+                                    game:GetService("TeleportService"):TeleportToPlaceInstance(
+                                        PlaceID,
+                                        ID,
+                                        game.Players.LocalPlayer
+                                    )
+                                end
+                            )
+                            wait(4)
+                        end
+                    end
+                end
+            end
+
+            local function Teleport()
+                while wait() do
+                    pcall(
+                        function()
+                            TPReturner()
+                            if foundAnything ~= "" then
+                                TPReturner()
+                            end
+                        end
+                    )
+                end
+            end
+
+            Teleport()
+    end})
+
+    local ResetServerHopInfo = Tabs.Others:AddButton({
+        Title = "Reset Server Hop Info", 
+        Callback = function()
+            NotificationSound:Play()
+            delfile("NotSameServers.json")
+    end})
+
+    NotificationSound:Play()
+    Fluent:Notify({
+        Title = "Notification",
+        Content = "Script Made By syphix_n19",
+        Duration = 5
+    })
